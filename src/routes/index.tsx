@@ -104,7 +104,7 @@ function Landing() {
           <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-primary/25 via-accent/25 to-honey/25 blur-2xl" aria-hidden />
           <div className="relative rounded-[2.5rem] p-3 card-cozy">
             <img
-              src={appShot.url}
+              src={appShot}
               alt="TalkToMe HQ app showing Luna, a cozy teahouse buddy for Spanish practice"
               className="w-[280px] md:w-[320px] rounded-[2rem] shadow-inner"
               width={320}
@@ -122,7 +122,7 @@ function Landing() {
       {/* Logo divider band */}
       <section className="relative z-10 mx-auto max-w-6xl px-6">
         <div className="card-cozy rounded-[2rem] p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
-          <img src={logo.url} alt="TalkToMe HQ logo" className="h-28 md:h-32 rounded-2xl" />
+          <img src={logo} alt="TalkToMe HQ logo" className="h-28 md:h-32 rounded-2xl" />
           <div>
             <h2 className="font-display text-2xl md:text-3xl font-bold">
               Cozy chats. Real language skills.
@@ -201,7 +201,7 @@ function Landing() {
       <footer className="relative z-10 border-t border-border/60">
         <div className="mx-auto max-w-6xl px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
-            <img src={logo.url} alt="" className="h-8 w-8 rounded-lg" />
+            <img src={logo} alt="" className="h-8 w-8 rounded-lg" />
             <span className="font-display font-bold text-foreground">TalkToMe HQ</span>
           </div>
           <p>© {new Date().getFullYear()} TalkToMe HQ. Made with tea and sparkles.</p>
