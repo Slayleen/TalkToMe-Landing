@@ -1,49 +1,14 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
 import logo from "@/assets/talktome-logo.png";
 import appShot from "@/assets/talktome-app-new.png";
 import cozyBg from "@/assets/cozy-bg.jpg";
 import { Mic, Sparkles, Heart, Gem, Flame, Apple } from "lucide-react";
 
-// Keep this out of client code — it's only referenced inside the server function below,
-// so it never ends up in the browser bundle.
 const WAITLIST_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbze7pCN2CmdKAD8NMXG9sacJqIrvAGGwIg2WlXkCmjtwgXj8XAGY4Z7Zy3nIifw6Vp4/exec";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const joinWaitlist = createServerFn({ method: "POST" })
-  .validator((data: unknown) => {
-    const raw =
-      typeof data === "object" && data !== null && "email" in data
-        ? String((data as { email: unknown }).email ?? "")
-        : "";
-    const email = raw.trim().toLowerCase();
-    if (!EMAIL_RE.test(email)) {
-      throw new Error("Please enter a valid email address.");
-    }
-    return { email };
-  })
-  .handler(async ({ data }) => {
-    // Server-to-server, so no browser CORS/preflight concerns here.
-    const response = await fetch(WAITLIST_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ email: data.email }),
-    });
-
-    if (!response.ok) {
-      throw new Error("The waitlist sheet didn't accept the request.");
-    }
-
-    const result = (await response.json()) as { success?: boolean; error?: string };
-    if (!result.success) {
-      throw new Error(result.error || "Failed to join the waitlist.");
-    }
-
-    return { success: true as const };
-  });
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -90,15 +55,36 @@ function Landing() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
-    setIsSubmitting(true);
 
+    const cleanEmail = email.trim().toLowerCase();
+    if (!EMAIL_RE.test(cleanEmail)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
-      await joinWaitlist({ data: { email } });
-      alert("🎉 You're on the waitlist!");
-      setEmail("");
+      // NOTE: Content-Type is deliberately "text/plain" here, NOT "application/json".
+      // Apps Script Web Apps don't respond to CORS preflight (OPTIONS) requests, so
+      // using "application/json" makes the browser send a preflight that just fails
+      // silently. "text/plain" keeps this a "simple request" (no preflight), and the
+      // Apps Script's doPost can still JSON.parse(e.postData.contents) just fine.
+      const response = await fetch(WAITLIST_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ email: cleanEmail }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("🎉 You're on the waitlist!");
+        setEmail("");
+      } else {
+        alert(result.error || "Something went wrong. Please try again.");
+      }
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
-      alert(message);
+      alert("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
