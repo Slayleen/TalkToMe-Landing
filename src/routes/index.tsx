@@ -72,12 +72,12 @@ function Landing() {
       <section className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-6 pt-8 pb-24 md:grid-cols-2 md:pt-16">
         <div>
           <div className="flex flex-wrap items-center gap-2 mb-5">
-            <Chip icon={<Flame className="h-3.5 w-3.5 text-primary" />}>7-day streaks</Chip>
-            <Chip icon={<Gem className="h-3.5 w-3.5 text-teal" />}>Gacha buddies</Chip>
-            <Chip icon={<Heart className="h-3.5 w-3.5 text-primary" />}>Zero cringe</Chip>
+            <Chip icon={<Flame className="h-3.5 w-3.5 text-primary" />}>Streaks</Chip>
+            <Chip icon={<Gem className="h-3.5 w-3.5 text-teal" />}>Pulls</Chip>
+            <Chip icon={<Heart className="h-3.5 w-3.5 text-primary" />}>Bonds</Chip>
           </div>
           <h1 className="font-display text-5xl md:text-6xl leading-[1.05] font-bold text-foreground">
-            Speak a new language <span className="text-primary">with someone cute.</span>
+            Speak a new language <span className="text-primary">with a friend.</span>
           </h1>
           <p className="mt-5 text-lg text-foreground/70 max-w-lg">
             TalkToMe HQ turns casual language practice into a cozy little world. Chat out loud with AI
