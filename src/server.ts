@@ -3,6 +3,32 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 
+import express from 'express';
+import cors from 'cors';
+
+const app = express();
+
+// Replace with your frontend domain
+const allowedOrigin = 'talk-to-me-landing.vercel.app';
+
+app.use(cors({
+  origin: allowedOrigin,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true,
+}));
+
+app.use(express.json());
+
+// Your API routes here
+app.post('/api/waitlist', async (req, res) => {
+  // proxy or direct call to waitlist API
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
 };
