@@ -1,9 +1,49 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import logo from "@/assets/talktome-logo.png";
 import appShot from "@/assets/talktome-app-new.png";
 import cozyBg from "@/assets/cozy-bg.jpg";
 import { Mic, Sparkles, Heart, Gem, Flame, Apple } from "lucide-react";
+
+// Keep this out of client code — it's only referenced inside the server function below,
+// so it never ends up in the browser bundle.
+const WAITLIST_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbze7pCN2CmdKAD8NMXG9sacJqIrvAGGwIg2WlXkCmjtwgXj8XAGY4Z7Zy3nIifw6Vp4/exec";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const joinWaitlist = createServerFn({ method: "POST" })
+  .validator((data: unknown) => {
+    const raw =
+      typeof data === "object" && data !== null && "email" in data
+        ? String((data as { email: unknown }).email ?? "")
+        : "";
+    const email = raw.trim().toLowerCase();
+    if (!EMAIL_RE.test(email)) {
+      throw new Error("Please enter a valid email address.");
+    }
+    return { email };
+  })
+  .handler(async ({ data }) => {
+    // Server-to-server, so no browser CORS/preflight concerns here.
+    const response = await fetch(WAITLIST_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ email: data.email }),
+    });
+
+    if (!response.ok) {
+      throw new Error("The waitlist sheet didn't accept the request.");
+    }
+
+    const result = (await response.json()) as { success?: boolean; error?: string };
+    if (!result.success) {
+      throw new Error(result.error || "Failed to join the waitlist.");
+    }
+
+    return { success: true as const };
+  });
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -46,29 +86,21 @@ function Chip({ children, icon }: { children: React.ReactNode; icon?: React.Reac
 
 function Landing() {
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     try {
-      const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbze7pCN2CmdKAD8NMXG9sacJqIrvAGGwIg2WlXkCmjtwgXj8XAGY4Z7Zy3nIifw6Vp4/exec",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        }
-      );
-
-      const result = await response.json();
-
-      if (result.success) {
-        alert("🎉 You're on the waitlist!");
-        setEmail("");
-      }
+      await joinWaitlist({ data: { email } });
+      alert("🎉 You're on the waitlist!");
+      setEmail("");
     } catch (err) {
-      alert("Something went wrong. Please try again.");
+      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      alert(message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
@@ -221,8 +253,12 @@ function Landing() {
           placeholder="you@example.com"
           className="flex-1 rounded-full border border-border bg-card px-5 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
         />
-          <button className="rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-lg shadow-primary/30 hover:brightness-105 transition">
-            Get early access
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-lg shadow-primary/30 hover:brightness-105 transition disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? "Joining…" : "Get early access"}
           </button>
         </form>
       </section>

@@ -3,31 +3,12 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 
-import express from 'express';
-import cors from 'cors';
-
-const app = express();
-
-// Replace with your frontend domain
-const allowedOrigin = 'talk-to-me-landing.vercel.app';
-
-app.use(cors({
-  origin: allowedOrigin,
-  methods: ['GET', 'POST', 'OPTIONS'],
-  credentials: true,
-}));
-
-app.use(express.json());
-
-// Your API routes here
-app.post('/api/waitlist', async (req, res) => {
-  // proxy or direct call to waitlist API
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// NOTE: The waitlist submission logic lives in src/routes/index.tsx as a
+// TanStack Start server function (`joinWaitlist`), not here. This file is the
+// actual request entry point TanStack Start uses in production (see the
+// `export default { fetch }` below) — an Express app defined in this file
+// would never receive real traffic, and `express`/`cors` aren't even
+// dependencies of this project, so a block like that wouldn't build anyway.
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
