@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import logo from "@/assets/talktome-logo.png";
 import appShot from "@/assets/talktome-app-new.png";
@@ -44,6 +45,32 @@ function Chip({ children, icon }: { children: React.ReactNode; icon?: React.Reac
 }
 
 function Landing() {
+  const [email, setEmail] = useState("");
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbze7pCN2CmdKAD8NMXG9sacJqIrvAGGwIg2WlXkCmjtwgXj8XAGY4Z7Zy3nIifw6Vp4/exec",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("🎉 You're on the waitlist!");
+        setEmail("");
+      }
+    } catch (err) {
+      alert("Something went wrong. Please try again.");
+    }
+  };
   return (
     <div className="relative min-h-screen bg-cozy overflow-hidden">
       {/* Wallpaper texture */}
@@ -184,14 +211,16 @@ function Landing() {
         </p>
         <form
           className="mt-8 flex flex-col sm:flex-row items-stretch gap-3 max-w-lg mx-auto"
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSubmit}
         >
           <input
-            type="email"
-            required
-            placeholder="you@example.com"
-            className="flex-1 rounded-full border border-border bg-card px-5 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-          />
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@example.com"
+          className="flex-1 rounded-full border border-border bg-card px-5 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+        />
           <button className="rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-lg shadow-primary/30 hover:brightness-105 transition">
             Get early access
           </button>
