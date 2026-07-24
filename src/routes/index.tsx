@@ -7,13 +7,13 @@ import { Mic, Sparkles, Heart, Gem, Flame, Apple } from "lucide-react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "TalkToMe HQ — Cozy AI language practice with cute characters" },
+      { title: "TalkToMe — Cozy AI language practice with cute characters" },
       {
         name: "description",
         content:
           "Practice speaking a new language with adorable AI chatbot characters. Collect, customize, and chat your way to fluency in a cozy gacha-style world.",
       },
-      { property: "og:title", content: "TalkToMe HQ — Cozy AI language practice" },
+      { property: "og:title", content: "TalkToMe — Cozy AI language practice" },
       {
         property: "og:description",
         content:
@@ -59,7 +59,7 @@ function Landing() {
           <div className="h-10 w-10 rounded-2xl bg-primary/90 grid place-items-center text-primary-foreground font-bold shadow-sm">
             <Sparkles className="h-5 w-5" />
           </div>
-          <span className="font-display text-xl font-bold text-foreground">TalkToMe HQ</span>
+          <span className="font-display text-xl font-bold text-foreground">TalkToMe</span>
         </div>
         <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-foreground/70">
           <a href="#how" className="hover:text-foreground">How it works</a>
@@ -80,7 +80,7 @@ function Landing() {
             Speak a new language <span className="text-primary">with a friend.</span>
           </h1>
           <p className="mt-5 text-lg text-foreground/70 max-w-lg">
-            TalkToMe HQ turns casual language practice into a cozy little world. Chat out loud with AI
+            TalkToMe turns casual language practice into a cozy little world. Chat out loud with AI
             characters who each have their own voice, personality, and style — and collect them all.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -105,7 +105,7 @@ function Landing() {
           <div className="relative rounded-[2.5rem] p-3 card-cozy">
             <img
               src={appShot}
-              alt="TalkToMe HQ app showing Luna, a cozy teahouse buddy for Spanish practice"
+              alt="TalkToMe app showing Luna, a cozy teahouse buddy for Spanish practice"
               className="w-[280px] md:w-[320px] rounded-[2rem] shadow-inner"
               width={320}
             />
@@ -122,7 +122,7 @@ function Landing() {
       {/* Logo divider band */}
       <section className="relative z-10 mx-auto max-w-6xl px-6">
         <div className="card-cozy rounded-[2rem] p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
-          <img src={logo} alt="TalkToMe HQ logo" className="h-28 md:h-32 rounded-2xl" />
+          <img src={logo} alt="TalkToMe logo" className="h-28 md:h-32 rounded-2xl" />
           <div>
             <h2 className="font-display text-2xl md:text-3xl font-bold">
               Cozy chats. Real language skills.
@@ -180,7 +180,7 @@ function Landing() {
           Your first cozy conversation is one tap away.
         </h2>
         <p className="mt-4 text-foreground/70 text-lg">
-          Join the TalkToMe HQ waitlist and be first in when the app opens.
+          Join the TalkToMe waitlist and be first in when the app opens.
         </p>
         <form
           className="mt-8 flex flex-col sm:flex-row items-stretch gap-3 max-w-lg mx-auto"
@@ -202,9 +202,9 @@ function Landing() {
         <div className="mx-auto max-w-6xl px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <img src={logo} alt="" className="h-8 w-8 rounded-lg" />
-            <span className="font-display font-bold text-foreground">TalkToMe HQ</span>
+            <span className="font-display font-bold text-foreground">TalkToMe </span>
           </div>
-          <p>© {new Date().getFullYear()} TalkToMe HQ. Made with tea and sparkles.</p>
+          <p>© {new Date().getFullYear()} TalkToMe. Made with love and too much boba.</p>
         </div>
       </footer>
     </div>
