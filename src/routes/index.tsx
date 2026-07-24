@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import logo from "@/assets/talktome-logo.png.asset.json";
-import appShot from "@/assets/talktome-app-new.png.asset.json";
+import logo from "@/assets/talktome-logo.png";
+import appShot from "@/assets/talktome-app-new.png";
 import cozyBg from "@/assets/cozy-bg.jpg";
 import { Mic, Sparkles, Heart, Gem, Flame, Apple } from "lucide-react";
 
