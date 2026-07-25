@@ -6,7 +6,7 @@ import cozyBg from "@/assets/cozy-bg.jpg";
 import { Mic, Sparkles, Heart, Gem, Flame, Apple } from "lucide-react";
 
 const WAITLIST_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzsfzLmjXHPD0jCWzQB6ZLBk_sESrt7IcJQZL5hnJzeGdQTo1PqzvSYcuc3GqcRvEcs/exec";
+  "https://script.google.com/macros/s/AKfycbxoXQPpKOJvWWMtfKNeYBUSPCwk1T4QJySghXHNYphHFSOZjUvrgoFiQ-jWV9sMC9xr/exec";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
